@@ -1,0 +1,79 @@
+﻿@using Login_page.Models;
+@using System.Data;
+@*<script>
+    $(document).ready(function () {
+        $('#txtEntryDate').datepicker();
+    })*@
+<!--</script>-->
+
+                
+<div id="dvPartialCustomer_Assign_EntryPannel" style="display:none">
+    @using (Html.BeginForm("Dashboard", "Home"))
+    {
+
+        <div class="row">
+            <div class="col col sm-2">
+                Customer
+            </div>
+           
+             <div class="col col sm-4">
+                <select name="ddlPartialCustomer">
+                    <option value="0">Select</option>
+                    @{
+                        // List<BaseEquipment> plsData = (List<BaseEquipment>)ViewBag.plstData;
+                        System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dt;
+                        var pdata = (from p in dataTable.AsEnumerable()
+                                     select new
+                                     {
+                                         CustomerID = p.Field<Int32>("CustomerID"),
+                                         CustomerName = p.Field<string>("CustomerName"),
+                                         CustomerMObile = p.Field<string>("CustomerMObile"),
+                                         EquiCount = p.Field<Int32>("EquiCount")
+
+                                     }).ToList();
+                        foreach (var obj in pdata)
+                        {
+                            <option value="@obj.CustomerID.ToString()">@obj.CustomerName</option>
+                        }
+                    }
+                   
+                </select>
+
+            </div>
+
+            <div class="col col sm-2">
+                Select Equipment
+            </div>
+            <div class="col col sm-4">
+                <select name="ddlPartialEquipment">
+                    <option value="0">___Select___</option>
+                    @{
+                        List<BaseEquipment> plsData = (List<BaseEquipment>)ViewBag.plstData;//CustomerID
+                                                                                            // System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dt;
+                        
+                        foreach (var obj in plsData)
+                        {
+                            <option value="@obj.Equipment_ID.ToString()">@obj.Name</option>
+                        }
+                    }
+                </select>
+
+            </div>
+
+        </div> 
+        <div class="row">
+            <div class="col col sm-2">
+               Quantity
+            </div>
+            <div class="col col sm-4">
+                <input type="text" name="txtPartialEquiQuantity" id="txtPartialEquiQuantity" />
+            </div>
+        </div>
+        <div class="row">
+            <input type="submit" name="btnSubmit" id="btnPartialSave" value="Save Assignment" />
+        </div>
+     }
+
+</div>  
+            
+

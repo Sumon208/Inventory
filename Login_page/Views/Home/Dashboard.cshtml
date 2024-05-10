@@ -1,0 +1,148 @@
+﻿@using Login_page.Models;
+@using System.Data;
+@{
+    // ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <style>
+        table {
+            border: 1px solid white;
+        }
+
+            table tr td, table tr th {
+                border: 1px solid white;
+            }
+
+            table tr th {
+                border: 1px solid white;
+                background: green;
+            }
+
+        .trcontent:hover {
+            background: pink;
+        }
+    </style>
+}
+<script>
+    // ShowAssignmentEntryPannel()
+    function ShowAssignmentEntryPannel() {
+        $("#dvPartialCustomer_Assign_EntryPannel").dialog({
+            resizable: false,
+            height: "400",
+            width: 900,
+            modal: true
+        });
+        return false;
+    }
+    $(document).ready(function () {
+    })
+
+    function ShowEqipmentEntryPannel() {
+        $("#dvPartialEntryPannel").dialog({
+            resizable: false,
+            height: "400",
+            width: 900,
+            modal: true
+        });
+        return false;
+    }
+    $(document).ready(function () {
+    })
+</script>
+
+<form action="/Home/Dashboard" method="Post">
+    <input type="submit" name="btnAddNew" id="btnAddNew" onclick="return ShowEqipmentEntryPannel() " value="Add New" />
+    <div class="row">
+        <div class="col col-sm-6">
+            @{
+
+                List<BaseEquipment> plsData = (List<BaseEquipment>)ViewBag.plstData;
+                <div id="dvtable" style=" height:400px;width:500px;overflow:auto;border:1px solid white;">
+                    <h4>Instruments List</h4>
+                    Equipments Name<input type="text" id="txtName" name="txtName" />
+                    <input type="submit" value="Search" name="btnSubmit" />
+                    <input type="submit" value="Clear" name="btnSubmit" />
+                    <table style="width:100%">
+
+                        <tr style="position: sticky">
+                            <th>Name</th>
+                            <th> Count</th>
+                            <th>Stock</th>
+                            <th> EntryDate</th>
+                        </tr>
+                        @foreach (BaseEquipment obj in plsData)
+                        {
+                            if (ViewBag.txtName != "")
+                            {
+                                if (obj.Name == ViewBag.txtName)
+                                {
+                                    <tr class="clsTrContent">
+                                        <td>@obj.Name</td>
+                                        <td>@obj.EcCount</td>
+                                        <td>@obj.Stock</td>
+                                        <td>@obj.EntryDate.ToString()</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr class="clsTrContent">
+                                    <td>@obj.Name</td>
+                                    <td>@obj.EcCount</td>
+                                    <td>@obj.Stock</td>
+                                    <td>@obj.EntryDate.ToString()</td>
+                                </tr>
+                            }
+
+                        }
+                    </table>
+                </div>
+
+            }
+        </div>
+        <div class="col col-sm-6">
+
+            <input type="submit" name="bEquipAssignment" id="bEquipAssignment " onclick="return ShowAssignmentEntryPannel() " value="Assignment" />
+            <div id="dvtable" style=" height:400px;width:500px;overflow:auto;border:1px solid white;">
+                <h4> Customer Infromation</h4>
+                <table style="width:100%">
+                    <tr>
+                        <th>CustomerID</th>
+                        <th> CustomerName</th>
+                        <th> CustomerMObile</th>
+                        <th>EquiCount</th>
+                    </tr>
+                    @{
+                        System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dt;
+                        var pdata = (from p in dataTable.AsEnumerable()
+                                     select new
+                                     {
+                                         CustomerID = p.Field<Int32>("CustomerID"),
+                                         CustomerName = p.Field<string>("CustomerName"),
+                                         CustomerMObile = p.Field<string>("CustomerMObile"),
+                                         EquiCount = p.Field<Int32>("EquiCount")
+
+                                     }).ToList();
+                        foreach (var obj in pdata)
+                        {
+                            <tr>
+                                <td>@obj.CustomerID</td>
+                                <td>@obj.CustomerName</td>
+                                <td>@obj.CustomerMObile</td>
+                                <td>@obj.EquiCount</td>
+                            </tr>
+
+                        }
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</form>
+@*<a href="~/Views/Home/_PartialEquipmentEntry.cshtml">~/Views/Home/_PartialEquipmentEntry.cshtml</a>*@
+@Html.Partial("~/Views/Home/_PartialEquipmentEntry.cshtml")
+@Html.Partial("~/Views/Home/_PartialEquipmentAssign.cshtml")
+
+ 
